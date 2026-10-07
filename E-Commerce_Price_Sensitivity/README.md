@@ -6,7 +6,7 @@ How do customers respond to discounts? Where does extra discount buy extra volum
 **Notebooks:**
 - [`Price_Sensitivity_Analysis.ipynb`](Price_Sensitivity_Analysis.ipynb): the discount and demand analysis.
 - [`Case_Study_Profit_Growth.ipynb`](Case_Study_Profit_Growth.ipynb): a practice consulting case built on the same data. It works through clarifying questions, a profit tree, hypotheses, sizing, data sanity checks, prioritization and an answer-first recommendation, with a "Your turn" prompt and model answer at each step.
-- [`Tableau_Dashboard_Plan.md`](Tableau_Dashboard_Plan.md): the build plan for an interactive Tableau dashboard of the case, for the Sales, Finance, Growth, Product and Marketing teams.
+- [`dashboard/ShopCo_Dashboard_Plan.pdf`](dashboard/ShopCo_Dashboard_Plan.pdf): the plan for an interactive Tableau dashboard of the case, for the Sales, Finance, Growth, Product and Marketing teams, with [mockups](dashboard/mockups) of each page. `prepare_tableau_data.py` builds the Tableau-ready CSVs.
 
 ## Key findings
 
@@ -25,6 +25,8 @@ How do customers respond to discounts? Where does extra discount buy extra volum
 **5. A simple policy change: +29% merchandise profit with the same volume.** Dropping discounts under 23% (+22%) and capping discounts at 30% (+7%) would together have added about \$18.6M in merchandise profit over five years, without losing any units.
 
 ## Case study: restarting profit growth
+
+![Dashboard mockup: Executive Overview](dashboard/mockups/0_overview.png)
 
 **Problem:** revenue has been flat at about \$34M a year for five years, and the CEO wants +20% merchandise profit (+\$2.6M a year) within three years.
 

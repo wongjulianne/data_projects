@@ -3,7 +3,8 @@
 Reads the raw Kaggle files in ./data (run download_data.py first) and writes
 five tables to ./data/tableau, matching Tableau_Dashboard_Plan.md:
 
-    order_lines.csv    one row per order line   (relate to orders on order_id)
+    order_lines.csv    one row per order line   (relate to orders on order_id, products on product_id)
+    products.csv       one row per product
     orders.csv         one row per order        (relate to customers on customer_id)
     customers.csv      one row per customer
     customer_year.csv  one row per customer per active year (relate to customers on customer_id)
@@ -41,10 +42,9 @@ def discount_band(pct: pd.Series) -> pd.Series:
 
 
 def build_order_lines(items: pd.DataFrame, products: pd.DataFrame, orders: pd.DataFrame) -> pd.DataFrame:
+    # Category fields sit on the line for fast filtering; names and suppliers live in products.csv
     lines = items.merge(
-        products[["product_id", "product_name", "product_category", "product_subcategory", "brand", "supplier"]],
-        on="product_id",
-        how="left",
+        products[["product_id", "product_category", "product_subcategory", "brand"]], on="product_id", how="left"
     )
     lines.insert(0, "line_id", lines.order_id + "-" + (lines.groupby("order_id").cumcount() + 1).astype(str))
     lines["discount_pct"] = lines.discount_percentage.round(4)
@@ -56,8 +56,7 @@ def build_order_lines(items: pd.DataFrame, products: pd.DataFrame, orders: pd.Da
     # Returned lines carry a 0% discount (likely wiped by the refund), so keep them out of the demand curve
     lines["in_discount_analysis"] = status.ne("Returned")
     return lines[[
-        "line_id", "order_id", "product_id", "product_name", "product_category", "product_subcategory", "brand",
-        "supplier", "quantity", "unit_price", "unit_cost", "discount_pct", "discount_band", "gross_sales",
+        "line_id", "order_id", "product_id", "product_category", "product_subcategory", "brand", "quantity", "unit_price", "unit_cost", "discount_pct", "discount_band", "gross_sales",
         "discount_amount", "revenue", "product_cost", "merch_profit", "tax_amount", "shipping_cost",
         "in_discount_analysis",
     ]]
@@ -164,8 +163,11 @@ def main() -> None:
     customer_year = build_customer_year(orders, customers)
     levers = build_levers(lines, orders, customer_year)
 
+    products_out = products.rename(columns={"unit_price": "list_price", "product_cost": "list_unit_cost"})
+    products_out = products_out.drop(columns=["product_category", "product_subcategory", "brand"])
+
     tables = {
-        "order_lines": lines, "orders": orders, "customers": customers,
+        "order_lines": lines, "products": products_out, "orders": orders, "customers": customers,
         "customer_year": customer_year, "lever_summary": levers,
     }
     for name, table in tables.items():
