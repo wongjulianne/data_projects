@@ -1,6 +1,6 @@
-"""Download the Bank Customer Churn dataset from Kaggle.
+"""Download the E-Commerce Sales & Customer Analytics dataset from Kaggle.
 
-Dataset: https://www.kaggle.com/datasets/srisyra02/bank-customer-churn-prediction
+Dataset: https://www.kaggle.com/datasets/datascikhan/e-commerce-sales-and-customer-analytics
 
 Authentication (first match wins):
   * KAGGLE_API_TOKEN            -> sent as "Authorization: Bearer <token>"
@@ -25,7 +25,7 @@ import urllib.request
 import zipfile
 from pathlib import Path
 
-DATASET = "srisyra02/bank-customer-churn-prediction"
+DATASET = "datascikhan/e-commerce-sales-and-customer-analytics"
 URL = f"https://www.kaggle.com/api/v1/datasets/download/{DATASET}"
 DATA_DIR = Path(__file__).resolve().parent / "data"
 

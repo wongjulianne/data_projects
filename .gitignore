@@ -3,7 +3,7 @@ kaggle.json
 .env
 
 # Downloaded Kaggle data (re-pull with download_data.py)
-Bank_Customer_Churn/data/
+E-Commerce_Price_Sensitivity/data/
 
 __pycache__/
 .ipynb_checkpoints/
