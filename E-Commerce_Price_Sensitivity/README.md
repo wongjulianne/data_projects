@@ -3,7 +3,9 @@
 How do customers respond to discounts? Where does extra discount buy extra volume, and where does it just give away margin?
 
 **Data:** [E-Commerce Sales & Customer Analytics](https://www.kaggle.com/datasets/datascikhan/e-commerce-sales-and-customer-analytics) on Kaggle: about 138k orders and 398k order lines across 1,175 products, 2021–2025.
-**Notebook:** [`Price_Sensitivity_Analysis.ipynb`](Price_Sensitivity_Analysis.ipynb)
+**Notebooks:**
+- [`Price_Sensitivity_Analysis.ipynb`](Price_Sensitivity_Analysis.ipynb): the discount and demand analysis.
+- [`Case_Study_Profit_Growth.ipynb`](Case_Study_Profit_Growth.ipynb): a practice consulting case built on the same data. It works through clarifying questions, a profit tree, hypotheses, sizing, data sanity checks, prioritization and an answer-first recommendation, with a "Your turn" prompt and model answer at each step.
 
 ## Key findings
 
@@ -17,9 +19,21 @@ How do customers respond to discounts? Where does extra discount buy extra volum
 
 ![Revenue and profit per order line by discount band](images/profit_by_discount_band.png)
 
-**4. Deeper discounts go with far fewer returns.** About 17% of lines with less than 20% off are returned or cancelled, against about 1% at 20%+. This is a correlation, not proof that discounts cause fewer returns.
+**4. A misleading pattern in the returns data.** Returned lines almost always show a 0% discount, most likely because refunds wipe the discount field. That makes deep discounts look like they prevent returns when they probably don't, so this pattern is flagged and not used.
 
 **5. A simple policy change: +29% merchandise profit with the same volume.** Dropping discounts under 23% (+22%) and capping discounts at 30% (+7%) would together have added about \$18.6M in merchandise profit over five years, without losing any units.
+
+## Case study: restarting profit growth
+
+**Problem:** revenue has been flat at about \$34M a year for five years, and the CEO wants +20% merchandise profit (+\$2.6M a year) within three years.
+
+**Diagnosis:** everything is flat except new customers, which fell 96% from 2022 to 2025. The business is living off an aging customer base.
+
+**Recommendation** (risk-adjusted, about \$3.1M a year against the \$2.6M target):
+- **Discount redesign:** stop discounts under 23% and cap discounts at 30%. Worth \$1.9M a year risk-adjusted; A/B test it first.
+- **Restart acquisition:** about \$0.8M a year by year three.
+- **Payment-failure recovery:** every cancelled order is a failed payment. About \$0.25M a year.
+- **Return reduction:** about \$0.14M a year.
 
 ## Caveat
 
