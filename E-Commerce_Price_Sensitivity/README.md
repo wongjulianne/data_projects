@@ -6,6 +6,7 @@ How do customers respond to discounts? Where does extra discount buy extra volum
 **Notebooks:**
 - [`Price_Sensitivity_Analysis.ipynb`](Price_Sensitivity_Analysis.ipynb): the discount and demand analysis.
 - [`Case_Study_Profit_Growth.ipynb`](Case_Study_Profit_Growth.ipynb): a practice consulting case built on the same data. It works through clarifying questions, a profit tree, hypotheses, sizing, data sanity checks, prioritization and an answer-first recommendation, with a "Your turn" prompt and model answer at each step.
+- [`Tableau_Dashboard_Plan.md`](Tableau_Dashboard_Plan.md): the build plan for an interactive Tableau dashboard of the case, for the Sales, Finance, Growth, Product and Marketing teams.
 
 ## Key findings
 
