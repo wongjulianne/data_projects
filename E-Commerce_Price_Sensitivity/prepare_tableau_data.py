@@ -1,7 +1,7 @@
 """Build Tableau-ready CSVs for the ShopCo profit-growth dashboard.
 
 Reads the raw Kaggle files in ./data (run download_data.py first) and writes
-five tables to ./data/tableau, matching Tableau_Dashboard_Plan.md:
+six tables to ./data/tableau, matching dashboard/ShopCo_Dashboard_Plan.pdf:
 
     order_lines.csv    one row per order line   (relate to orders on order_id, products on product_id)
     products.csv       one row per product
