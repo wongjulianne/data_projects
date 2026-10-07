@@ -57,6 +57,7 @@ The data is pulled from the Kaggle API, not stored in the repo.
 pip install -r requirements.txt
 python download_data.py          # saves the CSVs to ./data (git-ignored)
 jupyter notebook Price_Sensitivity_Analysis.ipynb
+python prepare_tableau_data.py   # optional: Tableau-ready CSVs in ./data/tableau
 ```
 
 Credentials are picked up from `KAGGLE_API_TOKEN` (Bearer), from `KAGGLE_USERNAME` + `KAGGLE_KEY` or `~/.kaggle/kaggle.json` (Basic auth), or from a proxy that adds the `Authorization` header itself.

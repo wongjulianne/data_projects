@@ -50,10 +50,33 @@ order_items ──(order_id)── orders ──(customer_id)── customer_mas
 product_catalog
 ```
 
-### Pre-built extract (recommended)
-Two things are much easier to prepare in Python than in Tableau. Export them as extra CSVs and relate them on `customer_id`:
-1. **`customer_year.csv`**: one row per customer per year they were active, with `cohort_year` (year of first order) and `active_prior_year` (true/false). Drives the cohort and retention views.
-2. **`order_items_enriched.csv`** (optional): lines with `revenue`, `merch_profit` and `discount_band` precomputed. Speeds up the workbook and guarantees the numbers match the notebook.
+### Prepared CSVs (recommended)
+Run `python prepare_tableau_data.py` (after `download_data.py`). It writes five Tableau-ready tables to `data/tableau/`, with the core metrics already calculated and checked against the notebooks:
+
+| File | Grain | Rows | What's in it |
+|---|---|---|---|
+| `order_lines.csv` | Order line | 397,569 | Product and category, quantity, unit price and cost, `discount_pct`, `discount_band`, `revenue`, `merch_profit`, `in_discount_analysis` (false for returned lines) |
+| `orders.csv` | Order | 138,116 | Date and year, customer, channel, campaign, payment, status, delivery, rating, order totals, and flags: `is_first_order`, `is_payment_failure`, `is_returned`, `is_late`, `is_delivered` |
+| `customers.csv` | Customer | 25,000 | Segment, country, `customer_acquisition_cost`, `cohort_year`, first and last order, lifetime orders, revenue and profit |
+| `customer_year.csv` | Customer × active year | 83,730 | `cohort_year`, `years_since_first`, `is_new`, `active_prior_year`, orders, revenue and profit that year |
+| `lever_summary.csv` | Lever | 4 | Full potential, confidence, risk-adjusted value, time to impact, owner. Use it for a static waterfall; build Page 5 from parameters for the interactive version |
+
+**Relationships in Tableau** (drag the tables onto the canvas in this order):
+
+```
+order_lines ──(order_id)── orders ──(customer_id)── customers ──(customer_id)── customer_year
+```
+
+`lever_summary.csv` stays as a **separate data source** with no relationship.
+
+With these files, most of Section 4 is already done. Use the precalculated `revenue`, `merch_profit` and `discount_band` columns directly. You still need to create the ratio fields (Merch Margin, Discount Rate, AOV, the rates), since ratios have to be calculated in Tableau to stay correct when filtered, plus the scenario parameters.
+
+**Using the flags:**
+- Demand-curve and discount sheets: add `in_discount_analysis = True` as a filter.
+- New customers: `COUNTD(IF [Is First Order] THEN [Customer Id] END)` on `orders`, or `SUM(INT([Is New]))` on `customer_year`.
+- Payment failure rate: `AVG(INT([Is Payment Failure]))`.
+- Late delivery rate: `SUM(INT([Is Late])) / SUM(INT([Is Delivered]))`.
+- Retention by year: `SUM(INT([Active Prior Year])) / LOOKUP(COUNTD([Customer Id]), -1)` on `customer_year`, computed along `Year`.
 
 ---
 
@@ -285,7 +308,7 @@ Add a custom palette to `My Tableau Repository/Preferences.tps`:
 
 | Phase | Tasks | Done when |
 |---|---|---|
-| **1. Data prep** (½ day) | Run `download_data.py`; build `customer_year.csv` (and optionally the enriched lines file) in Python | Files load in Tableau without errors |
+| **1. Data prep** (½ hour) | Run `download_data.py`, then `prepare_tableau_data.py` | Five CSVs in `data/tableau/` load in Tableau without errors |
 | **2. Data model & fields** (½ day) | Set up relationships; create the Core metrics folder; create parameters | Validation table below matches |
 | **3. Worksheets** (1–2 days) | Build each sheet in Section 5 on its own worksheet, named `P1 · Demand curve` etc. | Every sheet answers its question on its own |
 | **4. Dashboards** (1 day) | Assemble pages with tiled containers; apply the standard frame | Nothing overlaps at 1366 × 768 |
