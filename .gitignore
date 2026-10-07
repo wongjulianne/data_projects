@@ -1,0 +1,9 @@
+# Kaggle credentials — never commit
+kaggle.json
+.env
+
+# Downloaded Kaggle data (re-pull with download_data.py)
+Bank_Customer_Churn/data/
+
+__pycache__/
+.ipynb_checkpoints/
